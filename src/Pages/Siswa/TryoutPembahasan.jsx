@@ -278,7 +278,7 @@ export default function SiswaTryoutPembahasan() {
             className="bg-gradient-to-br from-[#1E3A5F] to-[#2E4A7F] text-white p-6 rounded-xl shadow-lg w-full md:w-2/3 flex flex-col items-center"
             style={{ boxShadow: "0 10px 25px -5px rgba(30, 58, 95, 0.4)" }}
           >
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.6, duration: 0.5 }}
@@ -303,7 +303,7 @@ export default function SiswaTryoutPembahasan() {
                   <p className="text-gray-600">Gambar soal tidak tersedia</p>
                 )}
               </div>
-            </motion.div>
+            </motion.div> */}
 
             <motion.p
               initial={{ opacity: 0 }}

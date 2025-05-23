@@ -182,7 +182,7 @@ const EditTryoutSubjek = () => {
                 />
               </motion.div>
 
-              <motion.div variants={itemVariants}>
+              {/* <motion.div variants={itemVariants}>
                 <label className="block mb-2 text-sm font-medium text-gray-700">
                   Gambar Soal (Opsional)
                 </label>
@@ -224,7 +224,7 @@ const EditTryoutSubjek = () => {
                     </motion.div>
                   )}
                 </div>
-              </motion.div>
+              </motion.div> */}
 
               <motion.div variants={itemVariants} className="space-y-3">
                 <div className="flex justify-between items-center">

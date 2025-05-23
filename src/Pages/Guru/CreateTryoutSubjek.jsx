@@ -221,7 +221,7 @@ const CreateTryoutSubjek = () => {
       )}
 
       <div className="max-w-4xl mx-auto">
-        {questions.length > 0 && (
+        {/* {questions.length > 0 && (
           <div className="bg-white rounded-xl shadow-lg p-8 mb-6">
             <h2 className="text-xl font-bold text-gray-800 mb-4">Daftar Soal</h2>
             <div className="space-y-4">
@@ -246,7 +246,7 @@ const CreateTryoutSubjek = () => {
               ))}
             </div>
           </div>
-        )}
+        )} */}
 
         <div className="bg-white rounded-xl shadow-lg p-8">
           <div className="mb-8">
@@ -290,42 +290,6 @@ const CreateTryoutSubjek = () => {
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Gambar (Opsional)
-              </label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="hidden"
-                  id="image-upload"
-                />
-                <label
-                  htmlFor="image-upload"
-                  className="cursor-pointer flex flex-col items-center justify-center py-4"
-                >
-                  <FiUpload className="text-gray-400 text-2xl mb-2" />
-                  <span className="text-sm text-gray-500">Klik untuk upload gambar</span>
-                </label>
-                {formData.question_image && (
-                  <div className="mt-2 relative">
-                    <img
-                      src={URL.createObjectURL(formData.question_image)}
-                      alt="Preview"
-                      className="max-h-40 mx-auto rounded"
-                    />
-                    <button
-                      onClick={() => setFormData({ ...formData, question_image: null })}
-                      className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full"
-                    >
-                      <FiX size={16} />
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">

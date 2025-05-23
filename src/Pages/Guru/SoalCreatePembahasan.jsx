@@ -113,7 +113,7 @@ const SoalCreatePembahasan = () => {
         localStorage.removeItem(`tryout_form_${tryout_id}_${subject_id}`);
         localStorage.removeItem(`temp_save_data_${tryout_id}_${subject_id}`);
         alert('Soal dan pembahasan berhasil disimpan!');
-        navigate('/guru/tryout');
+        navigate(`/guru/tryout/${tryout_id}/${subject_id}`);
         return;
       }
     } catch (error) {
