@@ -243,7 +243,7 @@ const DetailGuru = () => {
       {showAddModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg w-96">
-            <h2 className="text-xl font-bold mb-4">Tambah Guru</h2>
+            <h2 className="text-xl font-bold text-blue-900 mb-4">Tambah Guru</h2>
             <form onSubmit={handleAddTeacher}>
               <div className="mb-4">
                 <label className="block text-gray-700 mb-2">Nama</label>
@@ -252,7 +252,7 @@ const DetailGuru = () => {
                   name="teacher_name"
                   value={formData.teacher_name}
                   onChange={handleInputChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
               </div>
@@ -263,7 +263,7 @@ const DetailGuru = () => {
                   name="NUPTK"
                   value={formData.NUPTK}
                   onChange={handleInputChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
               </div>
@@ -274,7 +274,7 @@ const DetailGuru = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
               </div>
@@ -302,7 +302,7 @@ const DetailGuru = () => {
       {showEditModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg w-96">
-            <h2 className="text-xl font-bold mb-4">Edit Guru</h2>
+            <h2 className="text-xl font-bold text-blue-900 mb-4">Edit Guru</h2>
             <form onSubmit={handleEditTeacher}>
               <div className="mb-4">
                 <label className="block text-gray-700 mb-2">Nama</label>
@@ -311,7 +311,7 @@ const DetailGuru = () => {
                   name="teacher_name"
                   value={formData.teacher_name}
                   onChange={handleInputChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
               </div>
@@ -322,7 +322,7 @@ const DetailGuru = () => {
                   name="NUPTK"
                   value={formData.NUPTK}
                   onChange={handleInputChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
               </div>
@@ -333,7 +333,7 @@ const DetailGuru = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
               </div>
@@ -344,7 +344,7 @@ const DetailGuru = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
               </div>
