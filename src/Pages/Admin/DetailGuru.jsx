@@ -201,7 +201,6 @@ const DetailGuru = () => {
           <table className="w-full border-collapse">
             <thead>
               <tr className="bg-gray-200">
-                <th className="p-3 text-left text-blue-600">Id</th>
                 <th className="p-3 text-left text-blue-600">Nama</th>
                 <th className="p-3 text-left text-blue-600">NUPTK</th>
                 <th className="p-3 text-left text-blue-600">Email</th>
@@ -211,7 +210,6 @@ const DetailGuru = () => {
             <tbody>
               {teachers.map((teacher, idx) => (
                 <tr key={teacher.teacher_id || idx} className="border-b">
-                  <td className="p-3 text-blue-600">{teacher.teacher_id}</td>
                   <td className="p-3 text-blue-600">{teacher.teacher_name}</td>
                   <td className="p-3 text-blue-600">{teacher.NUPTK}</td>
                   <td className="p-3 text-blue-600">{teacher.email}</td>
