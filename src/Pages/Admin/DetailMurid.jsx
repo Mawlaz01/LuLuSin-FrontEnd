@@ -123,12 +123,14 @@ const DetailMurid = () => {
 
       {/* Main Content */}
       <div className="p-6 bg-gray-100 flex-1">
-        <h1 className="text-2xl font-bold text-blue-600">Akun Murid</h1>
-        <div className="bg-white p-6 rounded-lg shadow mt-4">
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-2xl font-bold text-blue-600">Akun Murid</h1>
+        </div>
+
+        <div className="bg-white p-6 rounded-lg shadow">
           <table className="w-full border-collapse">
             <thead>
               <tr className="bg-gray-200">
-                {/* <th className="p-3 text-left text-blue-600">Id</th> */}
                 <th className="p-3 text-left text-blue-600">Nama</th>
                 <th className="p-3 text-left text-blue-600">NIM</th>
                 <th className="p-3 text-left text-blue-600">Email</th>
@@ -138,7 +140,6 @@ const DetailMurid = () => {
             <tbody>
               {students.map((student, idx) => (
                 <tr key={idx} className="border-b">
-                  {/* <td className="p-3 text-blue-600">{student.student_id}</td> */}
                   <td className="p-3 text-blue-600">{student.student_name}</td>
                   <td className="p-3 text-blue-600">{student.NISN}</td>
                   <td className="p-3 text-blue-600">{student.email}</td>
@@ -146,7 +147,7 @@ const DetailMurid = () => {
                     <button
                       onClick={() => handleDelete(student.student_id || student.NISN || student.email)}
                       disabled={deleteLoading}
-                      className={`bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700 ${
+                      className={`bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 ${
                         deleteLoading ? 'opacity-50 cursor-not-allowed' : ''
                       }`}
                     >
