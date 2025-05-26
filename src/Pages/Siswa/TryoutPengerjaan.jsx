@@ -34,7 +34,11 @@ export default function SiswaTryoutPengerjaan() {
       subjectData: null,
       questionData: []
     })
-  }, [subjectId])
+    // Hapus data dari localStorage saat pindah subjek
+    localStorage.removeItem(`tryout_${idTryout}_${subjectId}_time`);
+    localStorage.removeItem(`tryout_${idTryout}_${subjectId}_answers`);
+    localStorage.removeItem(`tryout_${idTryout}_${subjectId}_answered`);
+  }, [subjectId, idTryout])
 
   // Ambil data tryout setiap idTryout atau subjectId berubah
   useEffect(() => {
@@ -294,7 +298,10 @@ export default function SiswaTryoutPengerjaan() {
       // Update answeredQuestions
       setAnsweredQuestions((prev) => {
         if (!prev.includes(questionId)) {
-          return [...prev, questionId];
+          const newAnswered = [...prev, questionId];
+          // Simpan ke localStorage setelah update
+          localStorage.setItem(`tryout_${idTryout}_${subjectId}_answered`, JSON.stringify(newAnswered));
+          return newAnswered;
         }
         return prev;
       });
@@ -334,10 +341,17 @@ export default function SiswaTryoutPengerjaan() {
             if (currentSubjectId < maxSubjectId) {
               // Jika masih ada subjek berikutnya, arahkan ke peralihan
               const nextSubjectId = currentSubjectId + 1;
+              // Hapus data dari localStorage sebelum pindah subjek
+              localStorage.removeItem(`tryout_${idTryout}_${subjectId}_time`);
+              localStorage.removeItem(`tryout_${idTryout}_${subjectId}_answers`);
+              localStorage.removeItem(`tryout_${idTryout}_${subjectId}_answered`);
               navigate(`/siswa/tryout/${idTryout}/${nextSubjectId}/peralihan`);
             } else {
               // Jika ini adalah subjek terakhir dan semua soal sudah dijawab
-              // baru arahkan ke halaman penilaian
+              // Hapus semua data dari localStorage
+              localStorage.removeItem(`tryout_${idTryout}_${subjectId}_time`);
+              localStorage.removeItem(`tryout_${idTryout}_${subjectId}_answers`);
+              localStorage.removeItem(`tryout_${idTryout}_${subjectId}_answered`);
               navigate(`/siswa/tryout/${idTryout}/penilaian`);
             }
           } else {
