@@ -19,8 +19,7 @@ const DetailMurid = () => {
       setLoading(true);
       setError(null);
       const response = await axiosInstance.get("/API/admin/student");
-      console.log('API students:', response.data); // Debug log
-      // Mapping jika field dari API berbeda
+      // Pastikan student_id ada di data
       const mapped = response.data.map((s) => ({
         student_id: s.student_id || s.id || s.ID,
         student_name: s.student_name || s.nama || s.name,
@@ -123,35 +122,54 @@ const DetailMurid = () => {
 
       {/* Main Content */}
       <div className="p-6 bg-gray-100 flex-1">
-        <h1 className="text-2xl font-bold text-blue-600">Akun Murid</h1>
-        <div className="bg-white p-6 rounded-lg shadow mt-4">
+        <div className="flex justify-between items-center mb-4">
+          <div>
+            <h1 className="text-2xl font-bold text-blue-600">Akun Murid</h1>
+          </div>
+          {/* Tombol Logout di kanan atas */}
+          <Link to="/login">
+            <button className="flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition">
+              {/* Logout Icon */}
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1" />
+              </svg>
+              Logout
+            </button>
+          </Link>
+        </div>
+
+        <div className="bg-white p-6 rounded-lg shadow">
           <table className="w-full border-collapse">
             <thead>
-              <tr className="bg-gray-200">
-                {/* <th className="p-3 text-left text-blue-600">Id</th> */}
-                <th className="p-3 text-left text-blue-600">Nama</th>
-                <th className="p-3 text-left text-blue-600">NIM</th>
-                <th className="p-3 text-left text-blue-600">Email</th>
-                <th className="p-3 text-left text-blue-600">Aksi</th>
+              <tr className="bg-blue-100">
+                <th className="p-3 text-left text-blue-700 font-semibold">Nama</th>
+                <th className="p-3 text-left text-blue-700 font-semibold">NIM</th>
+                <th className="p-3 text-left text-blue-700 font-semibold">Email</th>
+                <th className="p-3 text-left text-blue-700 font-semibold">Aksi</th>
               </tr>
             </thead>
             <tbody>
-              {students.map((student, idx) => (
-                <tr key={idx} className="border-b">
-                  {/* <td className="p-3 text-blue-600">{student.student_id}</td> */}
-                  <td className="p-3 text-blue-600">{student.student_name}</td>
-                  <td className="p-3 text-blue-600">{student.NISN}</td>
-                  <td className="p-3 text-blue-600">{student.email}</td>
+              {students.map((student) => (
+                <tr key={student.student_id} className="border-b hover:bg-blue-50 transition">
+                  <td className="p-3 text-blue-900">{student.student_name}</td>
+                  <td className="p-3 text-blue-900">{student.NISN}</td>
+                  <td className="p-3 text-blue-900">{student.email}</td>
                   <td className="p-3">
-                    <button
-                      onClick={() => handleDelete(student.student_id || student.NISN || student.email)}
-                      disabled={deleteLoading}
-                      className={`bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700 ${
-                        deleteLoading ? 'opacity-50 cursor-not-allowed' : ''
-                      }`}
-                    >
-                      {deleteLoading ? 'Menghapus...' : 'Delete'}
-                    </button>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleDelete(student.student_id)}
+                        disabled={deleteLoading}
+                        className={`flex items-center gap-1 bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition ${
+                          deleteLoading ? 'opacity-50 cursor-not-allowed' : ''
+                        }`}
+                      >
+                        {/* Trash Icon */}
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2" />
+                        </svg>
+                        {deleteLoading ? 'Menghapus...' : 'Delete'}
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

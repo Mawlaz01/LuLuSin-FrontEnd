@@ -189,48 +189,71 @@ const DetailGuru = () => {
       <div className="p-6 bg-gray-100 flex-1">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold text-blue-600">Akun Guru</h1>
-          <button
-            onClick={() => setShowAddModal(true)}
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-          >
-            Tambah Guru
-          </button>
+          <Link to="/login">
+            <button className="flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition">
+              {/* Logout Icon */}
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1" />
+              </svg>
+              Logout
+            </button>
+          </Link>
         </div>
-
         <div className="bg-white p-6 rounded-lg shadow">
+          {/* Tombol Tambah Guru di atas tabel, kanan */}
+          <div className="flex justify-end mb-4">
+            <button
+              onClick={() => setShowAddModal(true)}
+              className="flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
+            >
+              {/* Plus Icon */}
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+              Tambah Guru
+            </button>
+          </div>
           <table className="w-full border-collapse">
             <thead>
-              <tr className="bg-gray-200">
-                <th className="p-3 text-left text-blue-600">Id</th>
-                <th className="p-3 text-left text-blue-600">Nama</th>
-                <th className="p-3 text-left text-blue-600">NUPTK</th>
-                <th className="p-3 text-left text-blue-600">Email</th>
-                <th className="p-3 text-left text-blue-600">Aksi</th>
+              <tr className="bg-blue-100">
+                <th className="p-3 text-left text-blue-700 font-semibold">Nama</th>
+                <th className="p-3 text-left text-blue-700 font-semibold">NUPTK</th>
+                <th className="p-3 text-left text-blue-700 font-semibold">Email</th>
+                <th className="p-3 text-left text-blue-700 font-semibold">Aksi</th>
               </tr>
             </thead>
             <tbody>
-              {teachers.map((teacher, idx) => (
-                <tr key={teacher.teacher_id || idx} className="border-b">
-                  <td className="p-3 text-blue-600">{teacher.teacher_id}</td>
-                  <td className="p-3 text-blue-600">{teacher.teacher_name}</td>
-                  <td className="p-3 text-blue-600">{teacher.NUPTK}</td>
-                  <td className="p-3 text-blue-600">{teacher.email}</td>
-                  <td className="p-3 space-x-2">
-                    <button
-                      onClick={() => openEditModal(teacher)}
-                      className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(teacher.teacher_id)}
-                      disabled={deleteLoading}
-                      className={`bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 ${
-                        deleteLoading ? 'opacity-50 cursor-not-allowed' : ''
-                      }`}
-                    >
-                      {deleteLoading ? 'Menghapus...' : 'Delete'}
-                    </button>
+              {teachers.map((teacher) => (
+                <tr key={teacher.teacher_id} className="border-b hover:bg-blue-50 transition">
+                  <td className="p-3 text-blue-900">{teacher.teacher_name}</td>
+                  <td className="p-3 text-blue-900">{teacher.NUPTK}</td>
+                  <td className="p-3 text-blue-900">{teacher.email}</td>
+                  <td className="p-3">
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => openEditModal(teacher)}
+                        className="flex items-center gap-1 bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition"
+                      >
+                        {/* Pencil Icon */}
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536M9 13l6-6m2 2l-6 6m2-2l-6 6m2-2l6-6" />
+                        </svg>
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(teacher.teacher_id)}
+                        disabled={deleteLoading}
+                        className={`flex items-center gap-1 bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition ${
+                          deleteLoading ? 'opacity-50 cursor-not-allowed' : ''
+                        }`}
+                      >
+                        {/* Trash Icon */}
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2" />
+                        </svg>
+                        {deleteLoading ? 'Menghapus...' : 'Delete'}
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
