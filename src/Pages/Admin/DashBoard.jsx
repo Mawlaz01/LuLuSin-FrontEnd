@@ -92,10 +92,8 @@ export default function Dashboard() {
   // Display a loading indicator while data is fetching.
   if (loading) {
     return (
-      <div className="flex bg-gray-100 min-h-screen w-screen fixed inset-0 overflow-hidden">
-        <div className="flex-1 p-6 flex items-center justify-center">
-          <p className="text-lg text-gray-600">Memuat data dashboard...</p>
-        </div>
+      <div className="flex items-center justify-center h-screen">
+        <p>Loading dashboard data...</p>
       </div>
     );
   }
@@ -103,49 +101,72 @@ export default function Dashboard() {
   // Display an error message if fetching data fails.
   if (error) {
     return (
-      <div className="flex bg-gray-100 min-h-screen w-screen fixed inset-0 overflow-hidden">
-        <div className="flex-1 p-6 flex items-center justify-center">
-          <p className="text-lg text-red-600">{error}</p>
-        </div>
+      <div className="flex items-center justify-center h-screen">
+        <p>Error loading dashboard data: {error}</p>
       </div>
     );
   }
 
   return (
-    <div className="flex bg-gray-100 min-h-screen w-screen fixed inset-0 overflow-hidden">
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+      className="flex bg-[#f5f0e6] w-screen h-screen fixed inset-0 overflow-hidden"
+    >
       {/* Sidebar */}
-      <div className="w-64 bg-white p-6 shadow-md">
-        <h1 className="text-xl font-bold text-blue-900">LuLuSin</h1>
-        <p className="text-xs text-gray-500">Education Academy</p>
+      <motion.div
+        variants={itemVariants}
+        className="w-64 bg-white p-6 shadow-lg h-full border-r border-gray-200"
+      >
+        <motion.div variants={itemVariants} className="mb-8">
+          <h1 className="text-2xl font-bold text-[#2f4a64]">LuLuSin</h1>
+          <p className="text-sm text-gray-500">Education Academy</p>
+        </motion.div>
+
         <nav className="mt-6">
           <ul className="space-y-4">
-            <li className="flex items-center space-x-2 text-gray-700 hover:text-blue-900 cursor-pointer">
-              <Link to="/admin/dashboard">
-                <span className="text-lg">📊</span>
-                <span>Dashboard</span>
-              </Link>
-            </li>
+            <Link to="/admin/dashboard">
+              <motion.li
+                variants={itemVariants}
+                whileHover={{ scale: 1.02 }}
+                className="flex items-center space-x-3 text-gray-700 hover:text-[#2f4a64] cursor-pointer p-2 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                <span className="text-xl">📊</span>
+                <span className="font-medium">Dashboard</span>
+              </motion.li>
+            </Link>
 
-            <li className="flex items-center space-x-2 text-gray-700 hover:text-blue-900 cursor-pointer">
-              <Link to="/admin/detailguru">
-                <span className="text-lg">👨‍🏫</span>
-                <span>Guru</span>
-              </Link>
-            </li>
-            <li className="flex items-center space-x-2 text-gray-700 hover:text-blue-900 cursor-pointer">
-              <Link to="/admin/detailmurid">
-                <span className="text-lg">👩‍🎓</span>
-                <span>Murid</span>
-              </Link>
-            </li>
+            <Link to="/admin/detailguru">
+              <motion.li
+                variants={itemVariants}
+                whileHover={{ scale: 1.02 }}
+                className="flex items-center space-x-3 text-gray-700 hover:text-[#2f4a64] cursor-pointer p-2 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                <span className="text-xl">👨‍🏫</span>
+                <span className="font-medium">Data Guru</span>
+              </motion.li>
+            </Link>
+
+            <Link to="/admin/detailmurid">
+              <motion.li
+                variants={itemVariants}
+                whileHover={{ scale: 1.02 }}
+                className="flex items-center space-x-3 text-gray-700 hover:text-[#2f4a64] cursor-pointer p-2 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                <span className="text-xl">👩‍🎓</span>
+                <span className="font-medium">Data Murid</span>
+              </motion.li>
+            </Link>
           </ul>
         </nav>
-      </div>
+      </motion.div>
 
-      {/* Main Content */}
-      <div className="p-6 bg-gray-100 flex-1">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-2xl font-bold text-blue-600">Dashboard</h1>
+      {/* Content */}
+      <div className="flex-1 p-8 h-full overflow-auto">
+        {/* Navbar */}
+        <motion.div variants={itemVariants} className="flex justify-between items-center mb-8">
+          <h2 className="text-2xl font-bold text-[#2f4a64]">Dashboard</h2>
           <Link to="/login">
             <button className="flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition">
               {/* Logout Icon */}
@@ -153,31 +174,44 @@ export default function Dashboard() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1" />
               </svg>
               Logout
-            </button>
+            </motion.button>
           </Link>
-        </div>
+        </motion.div>
 
-        <div className="bg-white p-6 rounded-lg shadow">
-          <div className="text-center mb-8">
-            <h3 className="text-2xl font-semibold text-blue-900">
+        {/* Welcome Card */}
+        <motion.div
+          variants={cardVariants}
+          whileHover="hover"
+          className="bg-white p-8 rounded-xl shadow-lg w-full h-full flex flex-col justify-center items-center"
+        >
+          <motion.div variants={itemVariants} className="text-center mb-8">
+            <h3 className="text-2xl font-semibold text-[#2f4a64]">
               Selamat Datang, {adminData.admin_name}
             </h3>
             <p className="text-gray-600 mt-2">Admin LuLusin</p>
-          </div>
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-blue-900 p-6 rounded-lg shadow-lg text-center">
+          <div className="mt-6 flex gap-8 w-full max-w-6xl flex-wrap justify-center">
+            <motion.div
+              variants={cardVariants}
+              whileHover="hover"
+              className="bg-[#2f4a64] p-8 rounded-xl shadow-lg text-center flex-1 min-w-[250px] transition-all duration-300 hover:shadow-xl"
+            >
               <p className="text-gray-200 font-semibold mb-2">Guru Terdaftar</p>
               <p className="text-4xl text-white font-bold">{countTS.total_teachers}</p>
-            </div>
+            </motion.div>
 
-            <div className="bg-blue-900 p-6 rounded-lg shadow-lg text-center">
+            <motion.div
+              variants={cardVariants}
+              whileHover="hover"
+              className="bg-[#2f4a64] p-8 rounded-xl shadow-lg text-center flex-1 min-w-[250px] transition-all duration-300 hover:shadow-xl"
+            >
               <p className="text-gray-200 font-semibold mb-2">Murid Terdaftar</p>
               <p className="text-4xl text-white font-bold">{countTS.total_students}</p>
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }

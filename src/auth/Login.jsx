@@ -4,12 +4,14 @@ import { motion } from "framer-motion"
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import axiosInstance from "../api/axiosInstance"
+import { FaEye, FaEyeSlash } from "react-icons/fa"
 
 const Login = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
 
   const handleLogin = async () => {
@@ -121,19 +123,28 @@ const Login = () => {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.8, duration: 0.4 }}
-              className="w-full mb-4"
+              className="w-full mb-4 relative"
             >
               <label className="block text-gray-700 text-sm font-semibold mb-1">Password</label>
-              <motion.input
-                whileFocus={{ scale: 1.02, boxShadow: "0 0 0 2px rgba(45, 69, 98, 0.3)" }}
-                transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                type="password"
-                placeholder="Masukkan password"
-                className="w-full p-3 border border-gray-300 rounded-xl bg-white text-gray-900 focus:outline-none focus:border-[#2D4562] focus:ring-1 focus:ring-[#2D4562]"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                disabled={loading}
-              />
+              <div className="relative">
+                <motion.input
+                  whileFocus={{ scale: 1.02, boxShadow: "0 0 0 2px rgba(45, 69, 98, 0.3)" }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Masukkan password"
+                  className="w-full p-3 border border-gray-300 rounded-xl bg-white text-gray-900 focus:outline-none focus:border-[#2D4562] focus:ring-1 focus:ring-[#2D4562] pr-10"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  disabled={loading}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-[#2D4562] focus:outline-none"
+                >
+                  {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                </button>
+              </div>
             </motion.div>
             <motion.button
               initial={{ y: 20, opacity: 0 }}
