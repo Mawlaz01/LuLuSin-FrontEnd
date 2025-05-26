@@ -57,10 +57,39 @@ export default function SiswaTryoutPengerjaan() {
           questionData: Array.isArray(response.data.questionData) ? response.data.questionData : []
         })
 
-        // Set timer berdasarkan total_waktu dari API
+        // Set timer berdasarkan total_waktu dari API atau dari localStorage jika ada
         if (response.data.subjectData?.total_waktu) {
           const minutes = parseInt(response.data.subjectData.total_waktu)
-          setTimeLeft({ minutes, seconds: 0 })
+          const savedTime = localStorage.getItem(`tryout_${idTryout}_${subjectId}_time`)
+          
+          if (savedTime) {
+            const { minutes: savedMinutes, seconds: savedSeconds, timestamp } = JSON.parse(savedTime)
+            const now = Date.now()
+            const elapsedSeconds = Math.floor((now - timestamp) / 1000)
+            const totalSeconds = savedMinutes * 60 + savedSeconds - elapsedSeconds
+            
+            if (totalSeconds > 0) {
+              setTimeLeft({
+                minutes: Math.floor(totalSeconds / 60),
+                seconds: totalSeconds % 60
+              })
+            } else {
+              setTimeLeft({ minutes, seconds: 0 })
+            }
+          } else {
+            setTimeLeft({ minutes, seconds: 0 })
+          }
+        }
+
+        // Load saved answers and answered questions from localStorage
+        const savedAnswers = localStorage.getItem(`tryout_${idTryout}_${subjectId}_answers`)
+        const savedAnsweredQuestions = localStorage.getItem(`tryout_${idTryout}_${subjectId}_answered`)
+        
+        if (savedAnswers) {
+          setSelectedAnswers(JSON.parse(savedAnswers))
+        }
+        if (savedAnsweredQuestions) {
+          setAnsweredQuestions(JSON.parse(savedAnsweredQuestions))
         }
 
         setLoading(false)
@@ -90,11 +119,25 @@ export default function SiswaTryoutPengerjaan() {
         if (!prev) return null
         
         if (prev.seconds > 0) {
-          return { ...prev, seconds: prev.seconds - 1 }
+          const newTime = { ...prev, seconds: prev.seconds - 1 }
+          // Simpan waktu ke localStorage setiap detik
+          localStorage.setItem(`tryout_${idTryout}_${subjectId}_time`, JSON.stringify({
+            ...newTime,
+            timestamp: Date.now()
+          }))
+          return newTime
         } else if (prev.minutes > 0) {
-          return { minutes: prev.minutes - 1, seconds: 59 }
+          const newTime = { minutes: prev.minutes - 1, seconds: 59 }
+          // Simpan waktu ke localStorage setiap detik
+          localStorage.setItem(`tryout_${idTryout}_${subjectId}_time`, JSON.stringify({
+            ...newTime,
+            timestamp: Date.now()
+          }))
+          return newTime
         } else {
           clearInterval(timer)
+          // Hapus waktu dari localStorage ketika waktu habis
+          localStorage.removeItem(`tryout_${idTryout}_${subjectId}_time`)
           // Cek apakah ini adalah subjek terakhir
           const currentSubjectId = Number(subjectId);
           const maxSubjectId = 7; // ID subjek maksimal
@@ -147,9 +190,16 @@ export default function SiswaTryoutPengerjaan() {
         setSelectedAnswers((prev) => {
           const newAnswers = { ...prev };
           delete newAnswers[questionId];
+          // Simpan ke localStorage setelah update
+          localStorage.setItem(`tryout_${idTryout}_${subjectId}_answers`, JSON.stringify(newAnswers));
           return newAnswers;
         });
-        setAnsweredQuestions((prev) => prev.filter(id => id !== questionId));
+        setAnsweredQuestions((prev) => {
+          const newAnswered = prev.filter(id => id !== questionId);
+          // Simpan ke localStorage setelah update
+          localStorage.setItem(`tryout_${idTryout}_${subjectId}_answered`, JSON.stringify(newAnswered));
+          return newAnswered;
+        });
         return;
       }
 
@@ -179,11 +229,21 @@ export default function SiswaTryoutPengerjaan() {
       }
 
       // Update state setelah berhasil menyimpan
-      setSelectedAnswers((prev) => ({ ...prev, [questionId]: answerOptionId }));
+      setSelectedAnswers((prev) => {
+        const newAnswers = { ...prev, [questionId]: answerOptionId };
+        // Simpan ke localStorage setelah update
+        localStorage.setItem(`tryout_${idTryout}_${subjectId}_answers`, JSON.stringify(newAnswers));
+        return newAnswers;
+      });
       
       // Pastikan questionId ada dalam answeredQuestions
       if (!answeredQuestions.includes(questionId)) {
-        setAnsweredQuestions((prev) => [...prev, questionId]);
+        setAnsweredQuestions((prev) => {
+          const newAnswered = [...prev, questionId];
+          // Simpan ke localStorage setelah update
+          localStorage.setItem(`tryout_${idTryout}_${subjectId}_answered`, JSON.stringify(newAnswered));
+          return newAnswered;
+        });
       }
     } catch (err) {
       console.error('Error menyimpan/menghapus jawaban:', err);
@@ -312,11 +372,18 @@ export default function SiswaTryoutPengerjaan() {
       setSelectedAnswers((prev) => {
         const newAnswers = { ...prev };
         delete newAnswers[questionId];
+        // Simpan ke localStorage setelah update
+        localStorage.setItem(`tryout_${idTryout}_${subjectId}_answers`, JSON.stringify(newAnswers));
         return newAnswers;
       });
       
       // Hapus dari daftar soal yang sudah dijawab
-      setAnsweredQuestions((prev) => prev.filter(id => id !== questionId));
+      setAnsweredQuestions((prev) => {
+        const newAnswered = prev.filter(id => id !== questionId);
+        // Simpan ke localStorage setelah update
+        localStorage.setItem(`tryout_${idTryout}_${subjectId}_answered`, JSON.stringify(newAnswered));
+        return newAnswered;
+      });
       
     } catch (err) {
       console.error('Error menghapus jawaban:', err);
