@@ -217,7 +217,40 @@ export default function SiswaLandingPage() {
               variants={containerVariants}
               className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 max-w-6xl mx-auto"
             >
-              {[...Array(8)].map((_, index) => (
+              {[
+                {
+                  title: "Registrasi Akun",
+                  desc: "Daftarkan diri kamu dengan mengisi data yang diperlukan untuk membuat akun di aplikasi LuLuSin."
+                },
+                {
+                  title: "Login ke Aplikasi",
+                  desc: "Masuk ke aplikasi menggunakan email dan password yang sudah didaftarkan."
+                },
+                {
+                  title: "Pilih Menu Tryout",
+                  desc: "Setelah login, pilih menu tryout SNBT yang tersedia di dashboard."
+                },
+                {
+                  title: "Pilih Paket Soal",
+                  desc: "Pilih paket soal tryout yang ingin kamu kerjakan sesuai kebutuhanmu."
+                },
+                {
+                  title: "Kerjakan Soal",
+                  desc: "Mulai kerjakan soal tryout sesuai waktu yang telah ditentukan."
+                },
+                {
+                  title: "Kumpulkan Jawaban",
+                  desc: "Setelah selesai, kumpulkan jawaban untuk mendapatkan hasil penilaian."
+                },
+                {
+                  title: "Lihat Hasil & Analisis Skor",
+                  desc: "Lihat hasil tryout dan analisis skor untuk mengetahui kelebihan dan kekuranganmu."
+                },
+                {
+                  title: "Ulangi Tryout & Tingkatkan Skor",
+                  desc: "Ulangi tryout untuk memperbaiki skor dan pantau perkembangan kemampuanmu."
+                }
+              ].map((item, index) => (
                 <motion.div
                   key={index}
                   custom={index}
@@ -227,8 +260,11 @@ export default function SiswaLandingPage() {
                     backgroundColor: "#3A5785",
                     transition: { type: "spring", stiffness: 300 },
                   }}
-                  className="bg-[#2E4568] h-32 rounded-lg shadow-md"
-                />
+                  className="bg-[#2E4568] h-32 rounded-lg shadow-md flex flex-col justify-center items-center p-3 text-center"
+                >
+                  <span className="font-bold text-white text-base mb-1">{item.title}</span>
+                  <span className="text-xs text-gray-200">{item.desc}</span>
+                </motion.div>
               ))}
             </motion.div>
           </div>
