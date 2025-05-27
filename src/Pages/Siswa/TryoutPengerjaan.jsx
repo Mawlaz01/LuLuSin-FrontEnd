@@ -23,22 +23,18 @@ export default function SiswaTryoutPengerjaan() {
     questionData: []
   })
 
-  // Reset state setiap subjectId berubah
-  useEffect(() => {
-    setCurrentQuestion(1)
-    setTimeLeft(null)
-    setLoading(true)
-    setError(null)
-    setExamData({
-      studentData: null,
-      subjectData: null,
-      questionData: []
-    })
-    // Hapus data dari localStorage saat pindah subjek
-    localStorage.removeItem(`tryout_${idTryout}_${subjectId}_time`);
-    localStorage.removeItem(`tryout_${idTryout}_${subjectId}_answers`);
-    localStorage.removeItem(`tryout_${idTryout}_${subjectId}_answered`);
-  }, [subjectId, idTryout])
+// Reset state setiap subjectId berubah, tapi jangan clear localStorage
+useEffect(() => {
+  setCurrentQuestion(1)
+  setLoading(true)
+  setError(null)
+  setExamData({
+    studentData: null,
+    subjectData: null,
+    questionData: []
+  })
+  // (JANGAN clear localStorage di sini, biarkan timer & jawaban tersimpan)
+}, [subjectId, idTryout])
 
   // Ambil data tryout setiap idTryout atau subjectId berubah
   useEffect(() => {
@@ -114,53 +110,78 @@ export default function SiswaTryoutPengerjaan() {
     fetchTryoutData()
   }, [idTryout, subjectId, navigate])
 
-  // Efek timer
-  useEffect(() => {
-    if (!timeLeft) return
+// Efek timer + auto‐submit jawaban null saat waktu habis
+useEffect(() => {
+  if (!timeLeft) return;
 
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (!prev) return null
-        
-        if (prev.seconds > 0) {
-          const newTime = { ...prev, seconds: prev.seconds - 1 }
-          // Simpan waktu ke localStorage setiap detik
-          localStorage.setItem(`tryout_${idTryout}_${subjectId}_time`, JSON.stringify({
-            ...newTime,
-            timestamp: Date.now()
-          }))
-          return newTime
-        } else if (prev.minutes > 0) {
-          const newTime = { minutes: prev.minutes - 1, seconds: 59 }
-          // Simpan waktu ke localStorage setiap detik
-          localStorage.setItem(`tryout_${idTryout}_${subjectId}_time`, JSON.stringify({
-            ...newTime,
-            timestamp: Date.now()
-          }))
-          return newTime
-        } else {
-          clearInterval(timer)
-          // Hapus waktu dari localStorage ketika waktu habis
-          localStorage.removeItem(`tryout_${idTryout}_${subjectId}_time`)
-          // Cek apakah ini adalah subjek terakhir
-          const currentSubjectId = Number(subjectId);
-          const maxSubjectId = 7; // ID subjek maksimal
+  const timer = setInterval(() => {
+    setTimeLeft(prev => {
+      if (!prev) return null;
 
-          if (currentSubjectId < maxSubjectId) {
-            // Jika bukan subjek terakhir, arahkan ke peralihan
-            const nextSubjectId = currentSubjectId + 1;
-            navigate(`/siswa/tryout/${idTryout}/${nextSubjectId}/peralihan`);
-          } else {
-            // Jika subjek terakhir, arahkan ke penilaian
-            navigate(`/siswa/tryout/${idTryout}/penilaian`);
-          }
-          return prev
+      // Countdown normal
+      if (prev.seconds > 0) {
+        const newTime = { minutes: prev.minutes, seconds: prev.seconds - 1 };
+        localStorage.setItem(
+          `tryout_${idTryout}_${subjectId}_time`,
+          JSON.stringify({ ...newTime, timestamp: Date.now() })
+        );
+        return newTime;
+      }
+      if (prev.minutes > 0) {
+        const newTime = { minutes: prev.minutes - 1, seconds: 59 };
+        localStorage.setItem(
+          `tryout_${idTryout}_${subjectId}_time`,
+          JSON.stringify({ ...newTime, timestamp: Date.now() })
+        );
+        return newTime;
+      }
+
+      // Waktu habis: menit=0 & detik=0
+      clearInterval(timer);
+      localStorage.removeItem(`tryout_${idTryout}_${subjectId}_time`);
+
+      // 1) Kumpulkan semua question_id
+      const allIds = examData.questionData.map(q => q.question_id);
+      // 2) Filter yang belum dijawab
+      const unanswered = allIds.filter(id => !answeredQuestions.includes(id));
+      // 3) POST null untuk tiap unanswered question
+      unanswered.forEach(async questionId => {
+        try {
+          await axiosInstance.post(
+            `/API/student/tryout/${idTryout}/${subjectId}/${questionId}/taking`,
+            { answerOptionId: null }
+          );
+        } catch(err) {
+          console.error(`Gagal submit null untuk soal ${questionId}:`, err);
         }
-      })
-    }, 1000)
+      });
 
-    return () => clearInterval(timer)
-  }, [timeLeft, navigate, idTryout, subjectId])
+      // 4) Hapus semua storage lokal subjek ini
+      localStorage.removeItem(`tryout_${idTryout}_${subjectId}_answers`);
+      localStorage.removeItem(`tryout_${idTryout}_${subjectId}_answered`);
+
+      // 5) Navigasi: kalau bukan subjek terakhir → peralihan, else → penilaian
+      const sid = Number(subjectId);
+      const maxSid = 7;
+      if (sid < maxSid) {
+        navigate(`/siswa/tryout/${idTryout}/${sid + 1}/peralihan`);
+      } else {
+        navigate(`/siswa/tryout/${idTryout}/penilaian`);
+      }
+
+      return prev;
+    });
+  }, 1000);
+
+  return () => clearInterval(timer);
+}, [
+  timeLeft,
+  examData.questionData,
+  answeredQuestions,
+  idTryout,
+  subjectId,
+  navigate
+]);
 
   // Jumlah total soal
   const totalQuestions = examData.questionData?.length || 0

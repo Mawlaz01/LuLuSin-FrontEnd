@@ -9,11 +9,11 @@ export default function SiswaDashBoard() {
   const [progressValues, setProgressValues] = useState([0, 0, 0])
   const [notDoneTryouts, setNotDoneTryouts] = useState([])
   const [topTryoutScores, setTopTryoutScores] = useState([])
+  const [countdownSNBT, setCountdownSNBT] = useState({ title: "", days: 0 })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const navigate = useNavigate()
 
-  // Fetch dashboard data
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
@@ -21,6 +21,7 @@ export default function SiswaDashBoard() {
         const response = await axiosInstance.get('/API/student/dashboard')
         setNotDoneTryouts(response.data.notDoneTryouts || [])
         setTopTryoutScores(response.data.topTryoutScores || [])
+        setCountdownSNBT(response.data.countdownSNBT || { title: "", days: 0 })
         setLoading(false)
       } catch (err) {
         console.error('Error fetching dashboard data:', err)
@@ -32,7 +33,12 @@ export default function SiswaDashBoard() {
     fetchDashboardData()
   }, [])
 
-  // Animation variants
+  useEffect(() => {
+    setProgressValues(
+      topTryoutScores.map((item) => (item.average_score / 100) * 100)
+    )
+  }, [topTryoutScores])
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -66,13 +72,6 @@ export default function SiswaDashBoard() {
       },
     }),
   }
-
-  // Animate progress bars after component mounts
-  useEffect(() => {
-    setProgressValues(
-      topTryoutScores.map((item) => (item.average_score / 100) * 100)
-    )
-  }, [topTryoutScores])
 
   if (loading) {
     return (
@@ -110,12 +109,13 @@ export default function SiswaDashBoard() {
           <span className="bg-[#1E3A5F] h-6 w-1.5 rounded-full mr-2 inline-block"></span>
           Dashboard
         </motion.h2>
-        <motion.div
+                <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.3, duration: 0.5 }}
           className="flex items-center mt-4"
         >
+          {/* Hari Box */}
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -131,20 +131,23 @@ export default function SiswaDashBoard() {
               transition={{ delay: 0.6, duration: 0.5 }}
               className="text-3xl font-bold"
             >
-              24
+              {countdownSNBT.days}
             </motion.p>
           </motion.div>
+
+          {/* Title */}
           <motion.p
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.5, duration: 0.5 }}
             className="ml-6 text-lg font-semibold text-gray-800 border-l-4 border-[#1E3A5F] pl-4 py-1"
           >
-            Usaha hari ini, kampus impian esok hari!
+            {countdownSNBT.title}
           </motion.p>
         </motion.div>
       </motion.div>
 
+      {/* Top Skor */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -199,13 +202,14 @@ export default function SiswaDashBoard() {
                 />
               </div>
               <motion.p variants={itemVariants} className="text-sm mt-2 text-right font-bold text-blue-300">
-                {item.average_score} / 1000
+                {item.average_score} / 100
               </motion.p>
             </motion.div>
           ))}
         </motion.div>
       </motion.div>
 
+      {/* Tryout Belum Dikerjakan */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -270,4 +274,3 @@ export default function SiswaDashBoard() {
     </div>
   )
 }
-
